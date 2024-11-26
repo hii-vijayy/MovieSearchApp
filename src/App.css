@@ -10,6 +10,7 @@ body {
 }
 
 /* Navbar Style */
+
 .navbar {
   display: flex;
   flex-direction: column; /* Stack brand and items vertically */
@@ -17,17 +18,18 @@ body {
   padding: 10px 20px;
   background: linear-gradient(135deg, #007bff, #00d4ff);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative; /* Position container for absolute positioning of the toggle */
 }
 
+/* Navbar Brand */
 .navbar-brand {
   font-size: 24px;
   font-weight: bold;
   color: white;
-  text-decoration: none;
-  margin: 20px 0; /* Space above and below the website name */
-  text-align: center; /* Center the website name */
+  margin-bottom: 10px; /* Add space between brand and items */
 }
 
+/* Navbar Items (Links) */
 .navbar-items {
   display: flex;
   justify-content: center; /* Center items horizontally */
@@ -47,6 +49,7 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
   color: #ffe600;
 }
+
 
 /* Search Bar Style */
 .container {
@@ -265,13 +268,47 @@ body {
   background-color: #fff;
   border-radius: 10px;
   padding: 20px;
-  width: 90%; /* Makes the modal width responsive */
-  max-width: 400px; /* Limits maximum width for larger screens */
+  width: 95%; /* Makes the modal width responsive */
+  max-width: 500px; /* Limits maximum width for larger screens */
   max-height: 90vh; /* Ensures modal does not exceed the viewport height */
   text-align: center;
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
   overflow-y: auto; /* Adds scrolling if content overflows vertically */
+}
+
+/* Modal Movie Image */
+.modal-movie-image {
+  width: 100%; /* Ensures it spans the available width */
+  max-width: 350px; /* Limits the width for smaller modals */
+  height: auto; /* Maintains aspect ratio */
+  display: block; /* Centers the image */
+  margin: 0 auto 15px; /* Centers the image horizontally with spacing */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Adjust iframe size for trailer */
+.modal iframe {
+  width: 100%;
+  max-width: 400px;
+  height: 315px;
+  border: none;
+}
+
+.description {
+  font-size: 18px;
+  margin-top: 20px;
+  color: #333;
+  font-weight: 600;
+  text-align: left;
+}
+
+.short-description{
+  text-align: left;
+  margin-top: 15px;
+  font-weight: 500;
+  font-size: 15px;
 }
 
 /* Close Button */
@@ -289,16 +326,6 @@ body {
   color: red;
 }
 
-/* Modal Movie Image */
-.modal-movie-image {
-  width: 100%; /* Ensures it spans the available width */
-  max-width: 250px; /* Limits the width for smaller modals */
-  height: auto; /* Maintains aspect ratio */
-  display: block; /* Centers the image */
-  margin: 0 auto 15px; /* Centers the image horizontally with spacing */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
 
 /* Animation */
 @keyframes fadeIn {
@@ -325,8 +352,44 @@ body {
   }
 
   .modal-movie-image {
-    max-width: 200px; /* Reduces image size for smaller screens */
+    max-width: 250px; /* Reduces image size for smaller screens */
   }
+}
+
+/* Close Button Styling */
+.close {
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 10;
+  color: #333;
+}
+/* Cast List Styling */
+
+.cast{
+  text-align: left;
+  margin-top: 30px;
+}
+
+.cast-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.cast-list li {
+  font-size: 14px;
+  padding: 5px 0;
+  color: #101010;
+  text-align:left;
+  font-weight: 500;
+}
+
+.cast-list li:before {
+  content: "• ";
+  color: #00aaff;
 }
 
 
@@ -352,11 +415,4 @@ body {
 .category-btn.general {
   background-color: green;
   color: white;
-}
-/* Modal Image */
-.modal-movie-image {
-  width: 100%;
-  max-width: 250px;
-  margin: 0 auto;
-  border-radius: 8px;
 }

@@ -1,15 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../App.css';
 
 function Content({ movies }) {
     const [selectedMovie, setSelectedMovie] = useState(null); // State for selected movie
+    const [movieCast, setMovieCast] = useState([]); // State for movie cast
+    const [trailerUrl, setTrailerUrl] = useState(''); // State for trailer URL
+    const apiKey = import.meta.env.VITE_IMDB_APP_API_KEY; // API key for TMDB
+
+    // Function to fetch cast and trailer data when a movie is clicked
+    const fetchMovieDetails = async (movieId) => {
+        try {
+            // Fetch cast
+            const castResponse = await fetch(
+                `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}`
+            );
+            const castData = await castResponse.json();
+            setMovieCast(castData.cast.slice(0, 10)); // Limit to 10 cast members
+
+            // Fetch trailer
+            const trailerResponse = await fetch(
+                `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`
+            );
+            const trailerData = await trailerResponse.json();
+            const trailer = trailerData.results.find(
+                (video) => video.type === 'Trailer' && video.site === 'YouTube'
+            );
+            if (trailer) {
+                setTrailerUrl(`https://www.youtube.com/embed/${trailer.key}`);
+            }
+        } catch (error) {
+            console.error('Error fetching movie details:', error);
+        }
+    };
 
     const handleMovieClick = (movie) => {
         setSelectedMovie(movie); // Set the selected movie when a card is clicked
+        setMovieCast([]); // Reset the cast data
+        setTrailerUrl(''); // Reset the trailer URL
+        fetchMovieDetails(movie.id); // Fetch details for the selected movie
     };
 
     const closeModal = () => {
         setSelectedMovie(null); // Close the modal
+        setMovieCast([]); // Reset the cast data
+        setTrailerUrl(''); // Reset the trailer URL
     };
 
     return (
@@ -77,12 +111,43 @@ function Content({ movies }) {
 
                         {/* Short Description */}
                         {selectedMovie.overview && (
-                            <p className="short-description">
-                                <strong>Description:</strong> 
+                            <div className='description'>Description:
+                                <div className="short-description">
                                 {selectedMovie.overview.length > 150
                                     ? selectedMovie.overview.slice(0, 150) + '...'
                                     : selectedMovie.overview}
-                            </p>
+                                </div>
+                            </div> 
+                        )}
+
+                        {/* Cast Section */}
+                        <h3 className='cast'>Cast:</h3>
+                        <ul className="cast-list">
+                            {movieCast.length > 0 ? (
+                                movieCast.map((member) => (
+                                    <li key={member.cast_id}>
+                                        {member.name} as {member.character}
+                                    </li>
+                                ))
+                            ) : (
+                                <li>No cast information available.</li>
+                            )}
+                        </ul>
+
+                        {/* Trailer Section */}
+                        {trailerUrl && (
+                            <div className="trailer">
+                                <h3>Trailer:</h3>
+                                <iframe
+                                    width="560"
+                                    height="315"
+                                    src={trailerUrl}
+                                    title="YouTube video player"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
                         )}
                     </div>
                 </div>
