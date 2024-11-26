@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-function PunjabiSection({ searchQuery, page, setPage }) {
+function PunjabiSection({ searchQuery, page, setPage, onMovieClick }) {
     const [movies, setMovies] = useState([]);
 
     useEffect(() => {
@@ -18,38 +18,34 @@ function PunjabiSection({ searchQuery, page, setPage }) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setMovies(data.results || []); // Use data.results for TMDB API
+                setMovies(data.results || []);
             } catch (error) {
                 console.error('Error fetching movies:', error);
-                setMovies([]); // Clear movies on error
+                setMovies([]);
             }
         };
 
         fetchPunjabiMovies();
-    }, [searchQuery, page]); // Reload on searchQuery or page change
+    }, [searchQuery, page]);
 
     return (
         <div>
-            <h2 className='section-heading'>Punjabi Movies</h2>
+            <h2 className="section-heading">Punjabi Movies</h2>
             <div className="content">
-                {movies.length > 0 ? (
-                    movies.map((movie) => (
-                        <div className="movie-card" key={movie.id}>
-                            <img
-                                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/default-image.png'}
-                                alt={movie.title}
-                                className="movie-image"
-                                onError={(e) => {
-                                    e.target.onerror = null; // Prevent looping
-                                    e.target.src = '/default-image.png'; // Fallback image
-                                }}
-                            />
-                            <h3 className="movie-name">{movie.title}</h3>
-                        </div>
-                    ))
-                ) : (
-                    <p>No movies found.</p>
-                )}
+                {movies.map((movie) => (
+                    <div
+                        className="movie-card"
+                        key={movie.id}
+                        onClick={() => onMovieClick(movie)} // Call onMovieClick here
+                    >
+                        <img
+                            src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/default-image.png'}
+                            alt={movie.title}
+                            className="movie-image"
+                        />
+                        <h3 className="movie-name">{movie.title}</h3>
+                    </div>
+                ))}
             </div>
         </div>
     );
