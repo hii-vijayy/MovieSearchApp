@@ -1,46 +1,32 @@
 import { useEffect, useState } from 'react';
+import Content from './Content';
 
-function BollywoodSection({ searchQuery, page, setPage, onMovieClick }) {
-    const [movies, setMovies] = useState([]);
+const BollywoodSection = ({ searchQuery, page, setPage, onMovieClick }) => {
+  const [movies, setMovies] = useState([]);
+  const apiKey = import.meta.env.VITE_IMDB_APP_API_KEY;
 
-    useEffect(() => {
-        const fetchBollywoodMovies = async () => {
-            const apiKey = import.meta.env.VITE_IMDB_APP_API_KEY;
-            let url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=hi-IN&region=IN&sort_by=popularity.desc&page=${page}&with_original_language=hi`;
+  useEffect(() => {
+    const fetchMovies = async () => {
+      let url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=hi-IN&region=IN&sort_by=popularity.desc&page=${page}&with_original_language=hi`;
 
-            if (searchQuery) {
-                url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${searchQuery}&page=${page}`;
-            }
+      if (searchQuery) {
+        // If there is a search query, fetch using the search endpoint
+        url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(searchQuery)}&page=${page}&language=hi-IN&region=IN`;
+      }
 
-            const response = await fetch(url);
-            const data = await response.json();
-            setMovies(data.results || []);
-        };
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setMovies(data.results || []);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    };
 
-        fetchBollywoodMovies();
-    }, [searchQuery, page]);
+    fetchMovies();
+  }, [searchQuery, page]);
 
-    return (
-        <div>
-            <h2 className="section-heading">Bollywood Movies</h2>
-            <div className="content">
-                {movies.map((movie) => (
-                    <div
-                        className="movie-card"
-                        key={movie.id}
-                        onClick={() => onMovieClick(movie)} // Call onMovieClick here
-                    >
-                        <img
-                            src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/default-image.png'}
-                            alt={movie.title}
-                            className="movie-image"
-                        />
-                        <h3 className="movie-name">{movie.title}</h3>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
+  return <Content movies={movies} onMovieClick={onMovieClick} />;
+};
 
 export default BollywoodSection;
