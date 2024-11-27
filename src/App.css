@@ -391,12 +391,50 @@ body {
   content: "• ";
   color: #00aaff;
 }
+.rating-btn {
+  background-color: #fff280;
+  border: none;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
 
+.director {
+  margin-top: 10px;
+}
+.read-more-text{
+  font-weight: 700;
+}
+.platform-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* Allows buttons to wrap if they exceed container width */
+}
 
-/* Star Rating */
-.star-rating {
-  color: #ff9800;
-  margin-right: 5px;
+.platform-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.platform-btn:hover {
+  transform: scale(1.1);
+}
+
+.platform-logo {
+  width: 20px; /* Adjust size of the logo */
+  height: 20px; /* Ensure logo remains square */
 }
 
 /* Category Button */
